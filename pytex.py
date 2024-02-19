@@ -33,7 +33,10 @@ def main():
 
     for block in re.finditer(regex, text, re.S):
         if block.group(1) == '!':
-            repl = str(eval(block.group(2), globals(), loc))
+            eval_result = eval(block.group(2), globals(), loc)
+            if not loc['__format__'] is None:
+                eval_result = loc['__format__'](eval_result)
+            repl = str(eval_result)
         else:
             exec(block.group(2), globals(), loc)
             repl = ''
